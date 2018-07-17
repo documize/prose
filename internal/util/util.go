@@ -85,3 +85,14 @@ func HasAnySuffix(a string, slice []string) bool {
 	}
 	return false
 }
+
+// ContainsAny determines if the string a contains any fo the strings contained
+// in the slice b.
+func ContainsAny(a string, b []string) bool {
+	for _, s := range b {
+		if strings.Contains(a, s) {
+			return true
+		}
+	}
+	return false
+}

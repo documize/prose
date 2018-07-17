@@ -2,12 +2,19 @@ package summarize
 
 import (
 	"encoding/json"
+	"fmt"
 	"path/filepath"
 	"testing"
 
 	"github.com/jdkato/prose/internal/util"
 	"github.com/stretchr/testify/assert"
 )
+
+var testdata = filepath.Join("..", "testdata")
+
+func check(expected, observed float64) bool {
+	return fmt.Sprintf("%0.2f", expected) == fmt.Sprintf("%0.2f", observed)
+}
 
 type testCase struct {
 	Text       string
@@ -29,7 +36,7 @@ type testCase struct {
 	ReadingEase float64
 }
 
-func TestSummarize(t *testing.T) {
+func TestSummarizePrep(t *testing.T) {
 	tests := make([]testCase, 0)
 	cases := util.ReadDataFile(filepath.Join(testdata, "summarize.json"))
 
@@ -40,4 +47,18 @@ func TestSummarize(t *testing.T) {
 		assert.Equal(t, test.Words, d.NumWords)
 		assert.Equal(t, test.Characters, d.NumCharacters)
 	}
+}
+
+func TestSummarize(t *testing.T) {
+	data := util.ReadDataFile(filepath.Join(testdata, "article.txt"))
+	d := NewDocument(string(data))
+
+	text := ""
+	for _, paragraph := range d.Summary(7) {
+		for _, s := range paragraph.Sentences {
+			text += (s.Text + " ")
+		}
+		text += "\n\n"
+	}
+	fmt.Print(text)
 }

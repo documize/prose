@@ -47,10 +47,8 @@ func TestTrain(t *testing.T) {
 		}
 	}
 
-	assert.Equal(t, nrWords*iter, int(tagger.Model.Instances))
-	for _, tag := range tagSet {
-		assert.True(t, util.StringInSlice(tag, tagger.Model.Classes))
-	}
+	assert.Equal(t, nrWords*iter, int(tagger.model.instances))
+	assert.Subset(t, tagger.Classes(), tagSet)
 }
 
 func random(min, max int) int {
